@@ -24,7 +24,7 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 // 회원가입 및 로그인 관련 모든 요청에 대해 아무나 승인
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/api-docs/**").permitAll()
                 // 기타 모든 요청에 대해 승인된 사용자만 허용
                 .anyRequest().authenticated()

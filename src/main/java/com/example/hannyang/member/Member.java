@@ -26,7 +26,7 @@ public class Member {
     private String password;
 
     @Column(nullable = false, length = 50)
-    private String name;
+    private String username;
 
     @Column(length = 15)
     private String contact;
@@ -42,17 +42,21 @@ public class Member {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @Builder
-    public Member(String email, String password, String name, String contact, Role role) {
+    public Member(String email, String password, String username, String contact, Role role) {
         this.email = email;
         this.password = password;
-        this.name = name;
+        this.username = username;
         this.contact = contact;
         this.role = role;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
     }
 
     // 포인트 적립 메서드
@@ -72,8 +76,12 @@ public class Member {
     public void update(MemberRequestDto requestDto) {
         this.email = requestDto.getEmail();
         this.password = requestDto.getPassword();
-        this.name = requestDto.getName();
+        this.username = requestDto.getUsername();
         this.contact = requestDto.getContact();
+    }
+
+    public void changePassword(String encode) {
+        this.password = encode;
     }
 
     public void setPoints(int i) {

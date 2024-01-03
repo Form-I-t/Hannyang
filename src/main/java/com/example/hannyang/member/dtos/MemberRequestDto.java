@@ -15,7 +15,7 @@ public class MemberRequestDto {
     private Role role;
     private String email;
     private String contact;
-    private String name;
+    private String username;
     private String password;
 
     public Member toEntity() {
@@ -23,7 +23,7 @@ public class MemberRequestDto {
                 .role(this.role)
                 .email(this.email)
                 .contact(this.contact)
-                .name(this.name)
+                .username(this.username)
                 .password(this.password)
                 .build();
     }

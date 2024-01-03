@@ -43,4 +43,14 @@ public class MemberService {
                 () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다. user_id = " + id));
         this.memberRepository.delete(member);
     }
+
+    /**
+     * 비밀번호 변경
+     */
+    @Transactional
+    public void changePassword(Long id, String password) {
+        Member member = this.memberRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다. user_id = " + id));
+        member.changePassword(this.passwordEncoder.encode(password));
+    }
 }

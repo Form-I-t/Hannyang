@@ -28,10 +28,10 @@ public class AuthService {
      */
     @Transactional
     public AuthResponseDto login(AuthRequestDto requestDto) {
-        Member member = this.memberRepository.findByEmail(requestDto.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다. username = " + requestDto.getUsername()));
+        Member member = this.memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(
+                () -> new IllegalArgumentException("해당 이메일을 가진 유저를 찾을 수 없습니다. email = " + requestDto.getEmail()));
         if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. username = " + requestDto.getUsername());
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. email = " + requestDto.getEmail());
         }
 
         // GENERATE ACCESS_TOKEN AND REFRESH_TOKEN
@@ -88,5 +88,5 @@ public class AuthService {
         // IN THIS CASE, USER HAVE TO LOGIN AGAIN, SO REGENERATE IS NOT APPROPRIATE
         return null;
     }
-    
+
 }

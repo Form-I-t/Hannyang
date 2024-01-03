@@ -34,7 +34,7 @@ public class CustomMemberDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return member.getName(); // Member의 고유 이름
+        return member.getUsername(); // Member의 고유 이름
     }
 
     @Override

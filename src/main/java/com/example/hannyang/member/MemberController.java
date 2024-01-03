@@ -65,4 +65,20 @@ public class MemberController {
         this.memberService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    /**
+     * 비밀번호 변경 API
+     */
+    @Operation(summary = "비밀번호 변경", description = "사용자의 비밀번호를 변경합니다.", tags = {"member"})
+    @ApiResponse(responseCode = "200", description = "성공적으로 비밀번호를 변경함")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청")
+    @ApiResponse(responseCode = "401", description = "인증 실패")
+    @ApiResponse(responseCode = "500", description = "서버 오류")
+    @PutMapping("/api/v1/member/password")
+    public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String accessToken,
+                                            @RequestBody String password) {
+        Long id = this.jwtTokenProvider.getUserIdFromToken(accessToken.substring(7));
+        this.memberService.changePassword(id, password);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }

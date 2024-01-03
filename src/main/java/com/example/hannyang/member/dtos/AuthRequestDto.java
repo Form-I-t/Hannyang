@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthRequestDto {
-    private String username;
+    private String email;  // 이메일을 사용자 아이디로 사용
     private String password;
 }
