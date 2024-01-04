@@ -1,5 +1,6 @@
 package com.example.hannyang.survey;
 
+import com.example.hannyang.member.Member;
 import com.example.hannyang.question.Question;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,6 +19,10 @@ public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyNumber; // 설문조사 번호
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member; // 회원
 
     @Column(nullable = false)
     private String surveyName; // 설문조사 이름
