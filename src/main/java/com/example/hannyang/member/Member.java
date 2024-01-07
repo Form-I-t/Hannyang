@@ -60,7 +60,7 @@ public class Member {
     }
 
     // 포인트 적립 메서드
-    public void earnPoints(Integer points) {
+    public void addPoints(Integer points) {
         this.points += points;
     }
 
