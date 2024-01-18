@@ -16,9 +16,8 @@ public class MemberResponseDto {
 
     public MemberResponseDto(Member entity) {
         this.id = entity.getMemberId();
-        this.username = entity.getUsername();
+        this.username = entity.getNickname();
         this.email = entity.getEmail();
-        this.contact = entity.getContact();
         this.point = entity.getPoints();
         this.role = entity.getRole().name();
     }

@@ -14,16 +14,14 @@ import lombok.Setter;
 public class MemberRequestDto {
     private Role role;
     private String email;
-    private String contact;
-    private String username;
+    private String nickname;
     private String password;
 
     public Member toEntity() {
         return Member.builder()
                 .role(this.role)
                 .email(this.email)
-                .contact(this.contact)
-                .username(this.username)
+                .nickname(this.nickname)
                 .password(this.password)
                 .build();
     }

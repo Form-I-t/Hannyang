@@ -28,13 +28,10 @@ public class CustomMemberDetails implements UserDetails {
         return member.getEmail();
     }
 
-    public String getContact() {
-        return member.getContact();
-    }
 
     @Override
     public String getUsername() {
-        return member.getUsername(); // Member의 고유 이름
+        return member.getNickname(); // Member의 고유 이름
     }
 
     @Override

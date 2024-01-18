@@ -26,10 +26,8 @@ public class Member {
     private String password;
 
     @Column(nullable = false, length = 50)
-    private String username;
+    private String nickname;
 
-    @Column(length = 15)
-    private String contact;
 
     private Integer points;
 
@@ -46,11 +44,10 @@ public class Member {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Member(String email, String password, String username, String contact, Role role) {
+    public Member(String email, String password, String nickname, String contact, Role role) {
         this.email = email;
         this.password = password;
-        this.username = username;
-        this.contact = contact;
+        this.nickname = nickname;
         this.role = role;
     }
 
@@ -76,8 +73,7 @@ public class Member {
     public void update(MemberRequestDto requestDto) {
         this.email = requestDto.getEmail();
         this.password = requestDto.getPassword();
-        this.username = requestDto.getUsername();
-        this.contact = requestDto.getContact();
+        this.nickname = requestDto.getNickname();
     }
 
     public void changePassword(String encode) {
@@ -85,6 +81,7 @@ public class Member {
     }
 
     public void setPoints(int i) {
+        this.points = i;
     }
 }
 

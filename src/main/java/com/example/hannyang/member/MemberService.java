@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -77,5 +79,15 @@ public class MemberService {
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
         member.usePoints(pointsToSubtract);
         memberRepository.save(member);
+    }
+
+    // 닉네임 중복 확인
+    public Optional<Member> findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
+    }
+
+    // 이메일 중복 확인
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 }

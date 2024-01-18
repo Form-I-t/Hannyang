@@ -81,4 +81,26 @@ public class MemberController {
         this.memberService.changePassword(id, password);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    @Operation(summary = "닉네임으로 회원 정보 조회", description = "닉네임으로 회원 정보를 조회합니다.", tags = {"member"})
+    @ApiResponse(responseCode = "200", description = "성공적으로 회원 정보를 조회함")
+    @ApiResponse(responseCode = "404", description = "회원 정보를 찾을 수 없음")
+    @ApiResponse(responseCode = "500", description = "서버 오류")
+    @GetMapping("/nickname/{nickname}")
+    public ResponseEntity<?> findMemberByNickname(@PathVariable String nickname) {
+        return memberService.findByNickname(nickname)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
+    @Operation(summary = "이메일로 회원 정보 조회", description = "이메일로 회원 정보를 조회합니다.", tags = {"member"})
+    @ApiResponse(responseCode = "200", description = "성공적으로 회원 정보를 조회함")
+    @ApiResponse(responseCode = "404", description = "회원 정보를 찾을 수 없음")
+    @ApiResponse(responseCode = "500", description = "서버 오류")
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> findMemberByEmail(@PathVariable String email) {
+        return memberService.findByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
 }
