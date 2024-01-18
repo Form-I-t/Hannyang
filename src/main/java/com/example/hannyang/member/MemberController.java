@@ -86,7 +86,7 @@ public class MemberController {
     @ApiResponse(responseCode = "200", description = "성공적으로 회원 정보를 조회함")
     @ApiResponse(responseCode = "404", description = "회원 정보를 찾을 수 없음")
     @ApiResponse(responseCode = "500", description = "서버 오류")
-    @GetMapping("/nickname/{nickname}")
+    @GetMapping("/api/v1/member/{nickname}")
     public ResponseEntity<?> findMemberByNickname(@PathVariable String nickname) {
         return memberService.findByNickname(nickname)
                 .map(ResponseEntity::ok)
@@ -97,7 +97,7 @@ public class MemberController {
     @ApiResponse(responseCode = "200", description = "성공적으로 회원 정보를 조회함")
     @ApiResponse(responseCode = "404", description = "회원 정보를 찾을 수 없음")
     @ApiResponse(responseCode = "500", description = "서버 오류")
-    @GetMapping("/email/{email}")
+    @GetMapping("/api/v1/member/{email}")
     public ResponseEntity<?> findMemberByEmail(@PathVariable String email) {
         return memberService.findByEmail(email)
                 .map(ResponseEntity::ok)
