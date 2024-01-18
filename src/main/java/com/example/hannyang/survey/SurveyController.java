@@ -1,14 +1,13 @@
 package com.example.hannyang.survey;
 
-import com.example.hannyang.survey.dtos.SurveyCrawlingDto;
-import com.example.hannyang.survey.dtos.SurveyRequestDto;
+import com.example.hannyang.survey.dtos.SurveyCreationDto;
 import com.example.hannyang.survey.dtos.SurveyResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,15 +18,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("survey")
 @Tag(name = "survey", description = "설문조사 API")
 public class SurveyController {
     private final SurveyService surveyService;
 
-    @Autowired
-    public SurveyController(SurveyService surveyService) {
-        this.surveyService = surveyService;
-    }
+//    @Autowired
+//    public SurveyController(SurveyService surveyService) {
+//        this.surveyService = surveyService;
+//    }
 
     @Operation(summary = "설문조사 등록", description = "새로운 설문조사를 등록합니다.", tags = {"survey"})
     @ApiResponse(responseCode = "200", description = "성공적으로 등록됨",
@@ -36,9 +36,8 @@ public class SurveyController {
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @ApiResponse(responseCode = "500", description = "서버 오류")
     @PostMapping
-    public ResponseEntity<Survey> createSurvey(@RequestBody SurveyCrawlingDto crawlingDto,
-                                               @RequestBody SurveyRequestDto requestDto) {
-        Survey newSurvey = surveyService.createSurvey(crawlingDto, requestDto);
+    public ResponseEntity<Survey> createSurvey(@RequestBody SurveyCreationDto surveyCreationDto) {
+        Survey newSurvey = surveyService.createSurvey(surveyCreationDto);
         return ResponseEntity.ok(newSurvey);
     }
 

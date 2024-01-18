@@ -48,7 +48,7 @@ public class Product {
         this.quantity += quantity;
     }
 
-    // 상품의 판매 여부를 변경하는 메서드
+    // 상품의 판매/품절 여부를 변경하는 메서드
     public void changeSoldOutStatus(Boolean isSoldOut) {
         this.isSoldOut = isSoldOut;
     }

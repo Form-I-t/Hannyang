@@ -27,6 +27,9 @@ dependencies {
     implementation 'javax.xml.bind:jaxb-api:2.3.1'   // JAXB API
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1' // JAXB Runtime
 
+    implementation 'software.amazon.awssdk:s3:2.20.43'
+
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

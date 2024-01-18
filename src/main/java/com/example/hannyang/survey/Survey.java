@@ -1,7 +1,7 @@
 package com.example.hannyang.survey;
 
 import com.example.hannyang.member.Member;
-import com.example.hannyang.question.Question;
+import com.example.hannyang.survey.question.Question;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +52,7 @@ public class Survey {
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
-
+    
     // 가성비를 계산하는 메소드
     @Transient
     public Double getValueForMoney() {

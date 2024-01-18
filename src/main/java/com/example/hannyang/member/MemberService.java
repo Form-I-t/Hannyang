@@ -2,6 +2,7 @@ package com.example.hannyang.member;
 
 import com.example.hannyang.member.dtos.MemberRequestDto;
 import com.example.hannyang.member.dtos.MemberResponseDto;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,29 @@ public class MemberService {
         Member member = this.memberRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다. user_id = " + id));
         member.changePassword(this.passwordEncoder.encode(password));
+    }
+
+    /**
+     * 멤버의 포인트 증가
+     */
+    // 멤버의 포인트 증가
+    @Transactional
+    public void addPoints(Long memberId, Integer pointsToAdd) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+        member.addPoints(pointsToAdd);
+        memberRepository.save(member);
+    }
+
+    /**
+     * 멤버의 포인트 감소
+     */
+    // 멤버의 포인트 감소
+    @Transactional
+    public void subtractPoints(Long memberId, Integer pointsToSubtract) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+        member.usePoints(pointsToSubtract);
+        memberRepository.save(member);
     }
 }

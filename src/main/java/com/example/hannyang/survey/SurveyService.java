@@ -1,8 +1,16 @@
 package com.example.hannyang.survey;
 
+import com.example.hannyang.survey.choice.Choice;
+import com.example.hannyang.survey.choice.ChoiceDto;
+import com.example.hannyang.survey.choice.ChoiceRepository;
 import com.example.hannyang.survey.dtos.SurveyCrawlingDto;
+import com.example.hannyang.survey.dtos.SurveyCreationDto;
 import com.example.hannyang.survey.dtos.SurveyRequestDto;
 import com.example.hannyang.survey.dtos.SurveyResponseDto;
+import com.example.hannyang.survey.question.Question;
+import com.example.hannyang.survey.question.QuestionDto;
+import com.example.hannyang.survey.question.QuestionRepository;
+import com.example.hannyang.survey.question.QuestionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +29,10 @@ public class SurveyService {
 
     @Autowired
     private SurveyRepository surveyRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
+    @Autowired
+    private ChoiceRepository choiceRepository;
 
     // 모든 설문조사 목록 조회
     public List<Survey> getAllSurveys() {
@@ -55,7 +67,6 @@ public class SurveyService {
         }
     }
 
-    // 설문조사 등록 메서드
 
     public List<Survey> getSurveysOrderByCreatedAtDesc() {
         return surveyRepository.findAllByOrderByCreatedAtDesc();
@@ -85,8 +96,13 @@ public class SurveyService {
                 .collect(Collectors.toList());
     }
 
-    public Survey createSurvey(SurveyCrawlingDto crawlingDto, SurveyRequestDto requestDto) {
+    // 설문조사 등록 메서드
+    @Transactional
+    public Survey createSurvey(SurveyCreationDto creationDto) {
         Survey survey = new Survey();
+
+        // SurveyRequestDto에서 정보 설정
+        SurveyRequestDto requestDto = creationDto.getRequestDto();
         survey.setSurveyName(requestDto.getSurveyName());
         survey.setGoogleFormLink(requestDto.getGoogleFormLink());
         survey.setRewardPoints(requestDto.getRewardPoints());
@@ -94,11 +110,33 @@ public class SurveyService {
         survey.setCurrentParticipants(0);
         survey.setDeadline(requestDto.getDeadline());
         survey.setAccount(requestDto.getAccount());
+
+        // SurveyCrawlingDto에서 정보 설정
+        SurveyCrawlingDto crawlingDto = creationDto.getCrawlingDto();
         survey.setRequesterOrganization(crawlingDto.getRequesterOrganization());
         survey.setQuestionCount(crawlingDto.getQuestionCount());
         survey.setRestrictions(crawlingDto.getRestrictions());
+
+        for (QuestionDto questionDto : crawlingDto.getQuestions()) {
+            Question question = new Question();
+            question.setContent(questionDto.getContent());
+            question.setType(QuestionType.valueOf(questionDto.getType().name()));
+
+            if (question.getType() != QuestionType.SHORT_ANSWER) { // 주관식을 제외한 경우
+                for (ChoiceDto choiceDto : questionDto.getChoices()) {
+                    Choice choice = new Choice();
+                    choice.setContent(choiceDto.getContent());
+                    question.getChoices().add(choice);
+                }
+            }
+            // 주관식의 경우, choices 리스트를 추가하지 않음
+
+            survey.getQuestions().add(question);
+        }
+
         return surveyRepository.save(survey);
     }
+
 
     // 가성비 높은 순으로 설문 목록 조회
     public List<Survey> getSurveysOrderByValueForMoney() {

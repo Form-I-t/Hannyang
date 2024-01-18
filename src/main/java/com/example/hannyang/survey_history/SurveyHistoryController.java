@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/survey-history")
+@RequiredArgsConstructor
 @Tag(name = "survey-history", description = "설문조사 참여내역 API")
 public class SurveyHistoryController {
 
-    @Autowired
-    private SurveyHistoryService surveyHistoryService;
+    private final SurveyHistoryService surveyHistoryService;
 
     // 설문조사 참여 내역 저장 + 포인트 부여 ++ 포인트 적립 내역 저장
     @Operation(summary = "설문조사 참여 내역 저장 + 포인트 부여", description = "새로운 설문조사 참여 내역을 등록합니다.", tags = {"survey-history"})

@@ -1,4 +1,4 @@
-package com.example.hannyang.question;
+package com.example.hannyang.survey.question;
 
 import org.springframework.stereotype.Service;
 

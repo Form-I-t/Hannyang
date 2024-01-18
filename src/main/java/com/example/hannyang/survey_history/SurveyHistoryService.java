@@ -1,10 +1,10 @@
 package com.example.hannyang.survey_history;
 
-import com.example.hannyang.member.MemberRepository;
+import com.example.hannyang.member.MemberService;
 import com.example.hannyang.point.Point;
 import com.example.hannyang.point.PointService;
 import com.example.hannyang.point.PointType;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class SurveyHistoryService {
 
-    @Autowired
-    private SurveyHistoryRepository surveyHistoryRepository;
-    @Autowired
-    private PointService pointService;
-    @Autowired
-    private MemberRepository memberRepository; // 포인트 적립을 위해 회원 정보 가져옴
+
+    private final SurveyHistoryRepository surveyHistoryRepository;
+
+    private final PointService pointService;
+
+    private final MemberService memberService;
 
     // 설문조사 참여 내역 저장 + 포인트 적립
     @Transactional
@@ -34,6 +34,9 @@ public class SurveyHistoryService {
         point.setTransactionDate(LocalDateTime.now());
         point.setExpirationDate(LocalDateTime.now().plusDays(30));
         pointService.createPoint(point);
+
+        // 포인트 적립
+        memberService.addPoints(surveyHistory.getMember().getMemberId(), surveyHistory.getRewardPoints());
 
         return savedSurveyHistory;
     }
