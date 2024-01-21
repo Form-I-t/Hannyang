@@ -1,16 +1,17 @@
 package com.example.hannyang.config;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
 public class AwsS3Config {
-    @Value("${ACCESS_KEY}") // application.properties 에 명시한 내용
+
+    @Value("${ACCESS_KEY}")
     private String accessKey;
 
     @Value("${SECRET_KEY}")
@@ -20,13 +21,12 @@ public class AwsS3Config {
     private String region;
 
     @Bean
-    public AmazonS3Client amazonS3Client() {
+    public S3Client s3Client() {
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
 
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
-
-        return (AmazonS3Client) AmazonS3ClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+        return S3Client.builder()
+                .region(Region.of(region))
+                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
     }
 }

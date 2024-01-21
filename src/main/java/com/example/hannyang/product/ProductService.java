@@ -48,8 +48,8 @@ public class ProductService {
             String keyName = "product-images/" + product.getId() + "-" + imageFile.getOriginalFilename();
             Path tempFile = convertMultipartFileToFile(imageFile);
 
-            s3ClientService.uploadFile(bucketName, keyName, tempFile);
-            String imageUrl = s3ClientService.getFileUrl(bucketName, keyName);
+            s3ClientService.uploadFile(keyName, tempFile);
+            String imageUrl = s3ClientService.getFileUrl(keyName);
             product.setImageUrl(imageUrl);
 
             Files.delete(tempFile); // 임시 파일 삭제
