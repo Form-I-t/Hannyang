@@ -1,9 +1,9 @@
 package com.example.hannyang.product;
 
-import com.example.hannyang.member.Member;
 import com.example.hannyang.member.MemberRepository;
 import com.example.hannyang.s3.S3ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +24,8 @@ public class ProductService {
 
     private final S3ClientService s3ClientService;
 
+    @Value("${BUCKET_NAME}") // application.properties 에 명시한 내용
+    private String bucketName;
 
     // 전체 리스트 조회
     public List<Product> getAllProducts() {
@@ -35,30 +37,6 @@ public class ProductService {
         return productRepository.findByType(type);
     }
 
-    // 상품 구매
-    @Transactional
-    public void purchaseProduct(Long memberId, Long productId, int quantity) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
-
-        // 총 구매 비용 계산
-        int totalCost = product.getPrice() * quantity;
-
-        if (member.getPoints() >= totalCost && product.getQuantity() >= quantity) {
-            member.setPoints(member.getPoints() - totalCost); // 포인트 차감
-            memberRepository.save(member);
-
-            product.setQuantity(product.getQuantity() - quantity); // 상품 수량 감소
-            productRepository.save(product);
-
-            // 구매 로직 추가 (예: 구매 내역 저장 등)
-        } else {
-            throw new IllegalArgumentException("Insufficient points or product quantity");
-        }
-    }
 
     // 이미지 Url과 함께 상품 정보 저장 (초기 등록)
     public Product createProductWithImage(Product product, MultipartFile imageFile) throws IOException {
@@ -67,7 +45,6 @@ public class ProductService {
 
         // 이미지 파일을 S3에 업로드하고, URL을 상품 정보에 추가
         if (imageFile != null && !imageFile.isEmpty()) {
-            String bucketName = "your-s3-bucket-name";
             String keyName = "product-images/" + product.getId() + "-" + imageFile.getOriginalFilename();
             Path tempFile = convertMultipartFileToFile(imageFile);
 

@@ -13,7 +13,7 @@ import java.nio.file.Path;
 @Service
 public class S3ClientService {
 
-    @Value("${aws.region}")
+    @Value("${cloud.aws.region.static}")
     private String region;
 
     public S3Client createS3Client() {

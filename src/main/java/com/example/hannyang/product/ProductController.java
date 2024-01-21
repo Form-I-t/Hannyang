@@ -53,4 +53,24 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
         }
     }
+
+    // 전체 리스트 조회
+    @Operation(summary = "전체 상품 조회", description = "전체 상품 리스트를 조회합니다.", tags = {"product"})
+    @ApiResponse(responseCode = "200", description = "조회 성공",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Product.class)))
+    @GetMapping("/all-products")
+    public ResponseEntity<?> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    // 상품 타입별 리스트 조회
+    @Operation(summary = "상품 타입별 상품 조회", description = "상품 타입별 상품 리스트를 조회합니다.", tags = {"product"})
+    @ApiResponse(responseCode = "200", description = "조회 성공",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Product.class)))
+    @GetMapping("/products-by-category")
+    public ResponseEntity<?> getProductsByCategory(@RequestParam ProductType type) {
+        return ResponseEntity.ok(productService.getProductsByCategory(type));
+    }
 }
