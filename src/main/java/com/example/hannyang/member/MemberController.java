@@ -88,9 +88,8 @@ public class MemberController {
     @ApiResponse(responseCode = "500", description = "서버 오류")
     @GetMapping("/api/v1/member/nickname/{nickname}")
     public ResponseEntity<?> findMemberByNickname(@PathVariable String nickname) {
-        return memberService.findByNickname(nickname)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+        boolean isMemberFound = memberService.findByNickname(nickname).isPresent();
+        return isMemberFound ? ResponseEntity.ok("ok") : ResponseEntity.status(HttpStatus.NOT_FOUND).body("no");
     }
 
     @Operation(summary = "이메일로 회원 정보 조회", description = "이메일로 회원 정보를 조회합니다.", tags = {"member"})
@@ -99,8 +98,7 @@ public class MemberController {
     @ApiResponse(responseCode = "500", description = "서버 오류")
     @GetMapping("/api/v1/member/email/{email}")
     public ResponseEntity<?> findMemberByEmail(@PathVariable String email) {
-        return memberService.findByEmail(email)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+        boolean isMemberFound = memberService.findByEmail(email).isPresent();
+        return isMemberFound ? ResponseEntity.ok("ok") : ResponseEntity.status(HttpStatus.NOT_FOUND).body("no");
     }
 }
