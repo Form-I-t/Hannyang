@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -21,10 +20,10 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
     Page<Survey> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     // 설문조사 포인트순으로 설문 목록을 가져옵니다.
-    List<Survey> findByRewardPoints(Integer rewardPoints);
+    List<Survey> findAllByOrderByRewardPointsDesc();
 
     // 마감 기한 별로 설문 목록을 가져옵니다.
-    List<Survey> findByDeadline(LocalDateTime deadline);
+    List<Survey> findAllByOrderByDeadlineAsc();
 
     // 가성비 높은 순으로 설문 목록을 가져옵니다.
     @Query("SELECT s FROM Survey s WHERE s.questionCount > 0 ORDER BY s.rewardPoints / s.questionCount DESC")

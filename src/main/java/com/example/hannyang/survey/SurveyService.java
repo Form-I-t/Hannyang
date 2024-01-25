@@ -6,7 +6,6 @@ import com.example.hannyang.survey.choice.ChoiceRepository;
 import com.example.hannyang.survey.dtos.SurveyCrawlingDto;
 import com.example.hannyang.survey.dtos.SurveyCreationDto;
 import com.example.hannyang.survey.dtos.SurveyRequestDto;
-import com.example.hannyang.survey.dtos.SurveyResponseDto;
 import com.example.hannyang.survey.question.Question;
 import com.example.hannyang.survey.question.QuestionDto;
 import com.example.hannyang.survey.question.QuestionRepository;
@@ -18,10 +17,8 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -81,19 +78,15 @@ public class SurveyService {
     }
 
     // 설문조사 지급 포인트별 조회
-    public List<SurveyResponseDto> getSurveysByPoints(Integer rewardPoints) {
-        List<Survey> surveys = surveyRepository.findByRewardPoints(rewardPoints);
-        return surveys.stream()
-                .map(survey -> new SurveyResponseDto(survey.getDeadline(), survey.getRewardPoints(), survey.getCurrentParticipants()))
-                .collect(Collectors.toList());
+    public List<Survey> getSurveysByPoints() {
+        return surveyRepository.findAllByOrderByRewardPointsDesc();
+
     }
 
     // 설문조사 마감 기한별 조회
-    public List<SurveyResponseDto> getSurveysByDeadline(LocalDateTime deadline) {
-        List<Survey> surveys = surveyRepository.findByDeadline(deadline);
-        return surveys.stream()
-                .map(survey -> new SurveyResponseDto(survey.getDeadline(), survey.getRewardPoints(), survey.getCurrentParticipants()))
-                .collect(Collectors.toList());
+    public List<Survey> getSurveysByDeadline() {
+        return surveyRepository.findAllByOrderByDeadlineAsc();
+
     }
 
     // 설문조사 등록 메서드

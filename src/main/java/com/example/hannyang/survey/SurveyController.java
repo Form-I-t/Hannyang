@@ -1,7 +1,6 @@
 package com.example.hannyang.survey;
 
 import com.example.hannyang.survey.dtos.SurveyCreationDto;
-import com.example.hannyang.survey.dtos.SurveyResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,11 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -84,8 +81,8 @@ public class SurveyController {
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @ApiResponse(responseCode = "500", description = "서버 오류")
     @GetMapping("/by-points")
-    public ResponseEntity<List<SurveyResponseDto>> getSurveysByPoints(@RequestParam Integer rewardPoints) {
-        List<SurveyResponseDto> surveys = surveyService.getSurveysByPoints(rewardPoints);
+    public ResponseEntity<List<Survey>> getSurveysByPoints() {
+        List<Survey> surveys = surveyService.getSurveysByPoints();
         return ResponseEntity.ok(surveys);
     }
 
@@ -97,8 +94,8 @@ public class SurveyController {
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @ApiResponse(responseCode = "500", description = "서버 오류")
     @GetMapping("/by-deadline")
-    public ResponseEntity<List<SurveyResponseDto>> getSurveysByDeadline(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline) {
-        List<SurveyResponseDto> surveys = surveyService.getSurveysByDeadline(deadline);
+    public ResponseEntity<List<Survey>> getSurveysByDeadline() {
+        List<Survey> surveys = surveyService.getSurveysByDeadline();
         return ResponseEntity.ok(surveys);
     }
 
