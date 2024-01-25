@@ -25,7 +25,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 // 회원가입 및 로그인 관련 모든 요청에 대해 아무나 승인
                 .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/api-docs/**", "/product/**", "/api/v1/member/{nickname}", "/api/v1/member/{email}").permitAll()
+                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/api-docs/**", "/product/**", "/api/v1/member/email/", "/api/v1/member/nickname/").permitAll()
                 // 기타 모든 요청에 대해 승인된 사용자만 허용
                 .anyRequest().authenticated()
                 .and()
