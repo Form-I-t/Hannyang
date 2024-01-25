@@ -26,7 +26,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 인증이 필요 없는 경로를 정의
-        String[] skipPaths = {"/api/v1/auth/**", "/swagger-ui/", "/swagger-ui.html", "/v3/api-docs", "/swagger-resources", "/webjars", "/api/v1/member/**"};
+        String[] skipPaths = {"/api/v1/auth/**", "/swagger-ui/", "/swagger-ui.html", "/v3/api-docs", "/swagger-resources", "/webjars", "/api/v1/member/email/**", "/api/v1/member/nickname/**"};
 
         // 현재 요청 경로
         String requestPath = request.getRequestURI();
