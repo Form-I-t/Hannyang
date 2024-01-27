@@ -89,4 +89,16 @@ public class AuthService {
         return null;
     }
 
+    /**
+     * 로그아웃
+     */
+    @Transactional
+    public void logout(String accessToken) {
+        // CHECK IF ACCESS_TOKEN EXPIRATION AVAILABLE, THEN DELETE AUTH ENTITY
+        if (this.jwtTokenProvider.validateToken(accessToken)) {
+            Auth auth = this.authRepository.findByAccessToken(accessToken).orElseThrow(
+                    () -> new IllegalArgumentException("해당 ACCESS_TOKEN 을 찾을 수 없습니다. access_token = " + accessToken));
+            this.authRepository.delete(auth);
+        }
+    }
 }

@@ -28,4 +28,8 @@ public class ProductHistory {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime purchaseDate; // 상품 구매 날짜
+
+
+    @Column(nullable = false)
+    private Boolean isGiven;  // 상품 지급 상태 True/False
 }

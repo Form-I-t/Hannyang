@@ -38,7 +38,7 @@ public class SurveyHistoryController {
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @ApiResponse(responseCode = "404", description = "찾을 수 없음")
     @ApiResponse(responseCode = "500", description = "서버 오류")
-    @DeleteMapping("/{surveyHistoryId}")
+    @DeleteMapping("/admin/{surveyHistoryId}")
     public ResponseEntity<?> deleteSurveyHistory(@PathVariable Long surveyHistoryId) {
         surveyHistoryService.deleteSurveyHistory(surveyHistoryId);
         return ResponseEntity.ok().build();
@@ -50,7 +50,7 @@ public class SurveyHistoryController {
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @ApiResponse(responseCode = "404", description = "찾을 수 없음")
     @ApiResponse(responseCode = "500", description = "서버 오류")
-    @DeleteMapping("/by-survey-number/{surveyNumber}")
+    @DeleteMapping("/admin/by-survey-number/{surveyNumber}")
     public ResponseEntity<?> deleteSurveyHistoryBySurveyNumber(@PathVariable Long surveyNumber) {
         surveyHistoryService.deleteSurveyHistoryBySurveyNumber(surveyNumber);
         return ResponseEntity.ok().build();
@@ -64,7 +64,7 @@ public class SurveyHistoryController {
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @ApiResponse(responseCode = "404", description = "찾을 수 없음")
     @ApiResponse(responseCode = "500", description = "서버 오류")
-    @GetMapping("/{surveyHistoryId}")
+    @GetMapping("/admin/{surveyHistoryId}")
     public ResponseEntity<SurveyHistory> getSurveyHistory(@PathVariable Long surveyHistoryId) {
         SurveyHistory surveyHistory = surveyHistoryService.getSurveyHistory(surveyHistoryId);
         return ResponseEntity.ok(surveyHistory);

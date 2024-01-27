@@ -36,8 +36,22 @@ public class ProductHistoryController {
     @ApiResponse(responseCode = "200", description = "저장 성공",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ProductHistory.class)))
+    @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @PostMapping
     public void saveProductHistory(ProductHistory productHistory, Integer usedPoints, Long memberId) {
         productHistoryService.saveProductHistory(productHistory, usedPoints, memberId);
+    }
+
+    // 상품 주문 내역 상품 지급 상태 변경
+    @Operation(summary = "상품 지급 상태 변경",
+            description = "상품 주문 내역의 상품 지급 상태를 변경합니다.",
+            tags = {"product-history"})
+    @ApiResponse(responseCode = "200", description = "변경 성공",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ProductHistory.class)))
+    @ApiResponse(responseCode = "400", description = "잘못된 요청")
+    @PostMapping("/change-status")
+    public void changeStatus(Long productHistoryId, Boolean status) {
+        productHistoryService.changeStatus(productHistoryId, status);
     }
 }

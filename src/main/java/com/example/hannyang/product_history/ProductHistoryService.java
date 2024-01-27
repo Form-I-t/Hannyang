@@ -34,4 +34,11 @@ public class ProductHistoryService {
         // 회원 포인트 차감
         memberService.subtractPoints(memberId, usedPoints);
     }
+
+    // 상품 주문 내역 상품 지급 상태 변경
+    public void changeStatus(Long productHistoryId, Boolean status) {
+        ProductHistory productHistory = productHistoryRepository.findById(productHistoryId).orElseThrow();
+        productHistory.setIsGiven(status);
+        productHistoryRepository.save(productHistory);
+    }
 }

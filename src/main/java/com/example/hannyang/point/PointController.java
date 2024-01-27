@@ -1,12 +1,13 @@
 package com.example.hannyang.point;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -27,15 +28,5 @@ public class PointController {
         return ResponseEntity.ok(points);
     }
 
-    @Operation(summary = "포인트 내역 생성",
-            description = "새로운 포인트 내역을 생성합니다.",
-            tags = {"point"})
-    @ApiResponse(responseCode = "200", description = "생성 성공",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Point.class)))
-    @PostMapping
-    public ResponseEntity<Point> createPoint(@RequestBody Point point) {
-        Point createdPoint = pointService.createPoint(point);
-        return ResponseEntity.ok(createdPoint);
-    }
+
 }

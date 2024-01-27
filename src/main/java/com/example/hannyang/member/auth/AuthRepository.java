@@ -12,4 +12,6 @@ public interface AuthRepository extends JpaRepository<Auth, Long> {
     boolean existsByMember(Member member);
 
     Optional<Auth> findByRefreshToken(String refreshToken);
+
+    Optional<Auth> findByAccessToken(String accessToken);
 }

@@ -28,8 +28,14 @@ public class AuthController {
      */
     @PostMapping("/api/v1/auth/signup")
     public ResponseEntity<?> signup(@RequestBody MemberRequestDto requestDto) {
-        this.authService.signup(requestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        try {
+            this.authService.signup(requestDto);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("회원가입에 실패했습니다");
+        }
     }
 
     /**
@@ -39,5 +45,14 @@ public class AuthController {
     public ResponseEntity<?> refresh(@RequestHeader("REFRESH_TOKEN") String refreshToken) {
         String newAccessToken = this.authService.refreshToken(refreshToken);
         return ResponseEntity.status(HttpStatus.OK).body(newAccessToken);
+    }
+
+    /**
+     * 로그아웃 API
+     */
+    @PostMapping("/api/v1/auth/logout")
+    public ResponseEntity<?> logout(@RequestHeader("ACCESS_TOKEN") String accessToken) {
+        this.authService.logout(accessToken);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
