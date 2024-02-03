@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -43,8 +44,12 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    // 프로필 이미지 URL 변경 메서드
+    @Setter
+    private String profileImageUrl; // 프로필 사진 URL (Amazon S3)
+
     @Builder
-    public Member(String email, String password, String nickname, String contact, Role role) {
+    public Member(String email, String password, String nickname, Role role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -76,6 +81,9 @@ public class Member {
         this.nickname = requestDto.getNickname();
     }
 
+    // 회원 프로필 사진 저장 메서드
+
+
     public void changePassword(String encode) {
         this.password = encode;
     }
@@ -83,5 +91,6 @@ public class Member {
     public void setPoints(int i) {
         this.points = i;
     }
+
 }
 

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/product-history")
@@ -26,8 +28,8 @@ public class ProductHistoryController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ProductHistory.class)))
     @GetMapping("/{memberId}")
-    public <List> ProductHistory findByMemberMemberId(Long memberId) {
-        return productHistoryRepository.findByMemberMemberId(memberId);
+    public List<ProductHistory> findByMemberId(Long memberId) {
+        return productHistoryRepository.findByMemberId(memberId);
     }
 
     @Operation(summary = "상품 구매 내역 저장 및 포인트 차감",

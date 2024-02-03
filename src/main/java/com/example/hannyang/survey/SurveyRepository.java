@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
+    List<Survey> findByMemberId(Long memberId);
+
     // 최신 등록 순으로 정렬하여 설문 목록을 가져옵니다.
     List<Survey> findAllByOrderByCreatedAtDesc();
 

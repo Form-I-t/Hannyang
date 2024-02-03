@@ -1,6 +1,7 @@
 package com.example.hannyang.member;
 
 import com.example.hannyang.jwt.JwtTokenProvider;
+import com.example.hannyang.member.dtos.MemberProfileResponseDto;
 import com.example.hannyang.member.dtos.MemberRequestDto;
 import com.example.hannyang.member.dtos.MemberResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -100,5 +104,34 @@ public class MemberController {
     public ResponseEntity<?> findMemberByEmail(@PathVariable String email) {
         boolean isMemberFound = memberService.findByEmail(email).isPresent();
         return isMemberFound ? ResponseEntity.ok("ok") : ResponseEntity.status(HttpStatus.NOT_FOUND).body("no");
+    }
+
+    /**
+     * 회원 프로필 사진 저장 API
+     */
+    @Operation(summary = "회원 프로필 사진 저장", description = "사용자의 프로필 사진을 저장합니다.", tags = {"member"})
+    @ApiResponse(responseCode = "200", description = "성공적으로 프로필 사진을 저장함")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청")
+    @ApiResponse(responseCode = "401", description = "인증 실패")
+    @ApiResponse(responseCode = "500", description = "서버 오류")
+    @PostMapping("/api/v1/member/profile-image")
+    public ResponseEntity<?> saveProfileImage(@RequestHeader("Authorization") String accessToken,
+                                              @RequestParam MultipartFile profileImage) throws IOException {
+        Long id = this.jwtTokenProvider.getUserIdFromToken(accessToken.substring(7));
+        this.memberService.saveProfileImage(id, profileImage);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    /**
+     * 회원 프로필 정보 API (product,survey)
+     */
+    @Operation(summary = "회원 프로필 정보", description = "사용자의 프로필 정보를 조회합니다.", tags = {"member"})
+    @ApiResponse(responseCode = "200", description = "성공적으로 프로필 정보를 조회함")
+    @ApiResponse(responseCode = "401", description = "인증 실패")
+    @ApiResponse(responseCode = "500", description = "서버 오류")
+    @GetMapping("/api/v1/member/{memberId}/profile")
+    public ResponseEntity<MemberProfileResponseDto> findMemberProfile(@PathVariable Long memberId) {
+        MemberProfileResponseDto memberProfile = memberService.findProfileInfo(memberId);
+        return ResponseEntity.ok(memberProfile);
     }
 }
