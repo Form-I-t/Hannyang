@@ -29,7 +29,7 @@ public class ProductHistoryController {
                     schema = @Schema(implementation = ProductHistory.class)))
     @GetMapping("/{memberId}")
     public List<ProductHistory> findByMemberId(Long memberId) {
-        return productHistoryRepository.findByMemberId(memberId);
+        return productHistoryRepository.findByMemberMemberId(memberId);
     }
 
     @Operation(summary = "상품 구매 내역 저장 및 포인트 차감",

@@ -145,9 +145,9 @@ public class MemberService {
 
         // survey 데이터 조회
         List<Survey> surveys = surveyRepository.findByMemberId(memberId);
-        
+
         // productHistory 데이터 조회
-        List<ProductHistory> productHistories = productHistoryRepository.findByMemberId(memberId);
+        List<ProductHistory> productHistories = productHistoryRepository.findByMemberMemberId(memberId);
 
         // 조회된 데이터를 DTO에 담아 반환
         return new MemberProfileResponseDto(memberInfo, surveys, productHistories);
