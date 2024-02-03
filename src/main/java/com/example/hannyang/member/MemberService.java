@@ -144,7 +144,7 @@ public class MemberService {
 
 
         // survey 데이터 조회
-        List<Survey> surveys = surveyRepository.findByMemberId(memberId);
+        List<Survey> surveys = surveyRepository.findByMemberMemberId(memberId);
 
         // productHistory 데이터 조회
         List<ProductHistory> productHistories = productHistoryRepository.findByMemberMemberId(memberId);
