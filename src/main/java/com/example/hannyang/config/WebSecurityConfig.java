@@ -49,7 +49,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // 여기서 적절한 Origin을 설정하세요.
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3002"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token")); // 'Authorization' 헤더를 명시적으로 허용
         configuration.setExposedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token")); // 'Authorization' 헤더를 노출
