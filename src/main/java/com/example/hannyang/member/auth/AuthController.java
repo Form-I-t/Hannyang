@@ -31,8 +31,8 @@ public class AuthController {
         AuthResponseDto authResponseDto = this.authService.login(requestDto);
 
         // 액세스 토큰과 리프레시 토큰을 HTTP 응답 헤더에 추가
-        jwtTokenProvider.addTokenToHeader(response, "Access-Token", authResponseDto.getAccessToken(), jwtAccessTokenExpirationTime);
-        jwtTokenProvider.addTokenToHeader(response, "Refresh-Token", authResponseDto.getRefreshToken(), jwtRefreshTokenExpirationTime);
+        jwtTokenProvider.addTokenToHeader(response, "Authorization", authResponseDto.getAccessToken(), jwtAccessTokenExpirationTime);
+        jwtTokenProvider.addTokenToHeader(response, "Refresh_Token", authResponseDto.getRefreshToken(), jwtRefreshTokenExpirationTime);
 
         // 로그인 성공 응답 반환 (클라이언트에 쿠키를 포함하여 반환됩니다)
         return ResponseEntity.status(HttpStatus.OK).body("로그인 성공");
