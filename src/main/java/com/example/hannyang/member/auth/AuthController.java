@@ -1,9 +1,11 @@
 package com.example.hannyang.member.auth;
 
 
+import com.example.hannyang.jwt.JwtTokenProvider;
 import com.example.hannyang.member.dtos.AuthRequestDto;
 import com.example.hannyang.member.dtos.AuthResponseDto;
 import com.example.hannyang.member.dtos.MemberRequestDto;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +15,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AuthController {
     private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 로그인 API
      */
     @PostMapping("/api/v1/auth/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequestDto requestDto) {
+    public ResponseEntity<?> login(@RequestBody AuthRequestDto requestDto, HttpServletResponse response) {
         AuthResponseDto authResponseDto = this.authService.login(requestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(requestDto);
+
+        // JWT 토큰을 쿠키에 저장
+        jwtTokenProvider.createTokenCookie(authResponseDto.getAccessToken(), response);
+
+        // 로그인 성공 응답 반환 (클라이언트에 쿠키를 포함하여 반환됩니다)
+        return ResponseEntity.status(HttpStatus.OK).body("로그인 성공");
     }
+
 
     /**
      * 회원가입 API
@@ -42,9 +51,16 @@ public class AuthController {
      * 토큰갱신 API
      */
     @GetMapping("/api/v1/auth/refresh")
-    public ResponseEntity<?> refresh(@RequestHeader("REFRESH_TOKEN") String refreshToken) {
+    public ResponseEntity<?> refresh(@RequestHeader("REFRESH_TOKEN") String refreshToken, HttpServletResponse response) {
         String newAccessToken = this.authService.refreshToken(refreshToken);
-        return ResponseEntity.status(HttpStatus.OK).body(newAccessToken);
+        if (newAccessToken != null) {
+            // 새 엑세스 토큰을 쿠키에 저장
+            jwtTokenProvider.createTokenCookie(newAccessToken, response);
+            return ResponseEntity.status(HttpStatus.OK).body("토큰 갱신 성공");
+        } else {
+            // 새 토큰 생성 실패 (예: 리프레시 토큰 만료)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰 갱신 실패");
+        }
     }
 
     /**

@@ -73,19 +73,21 @@ public class AuthService {
      */
     @Transactional
     public String refreshToken(String refreshToken) {
-        // CHECK IF REFRESH_TOKEN EXPIRATION AVAILABLE, UPDAT ACCESS_TOKEN AND RETURN
+        // 체크: 리프레시 토큰이 유효한지 확인
         if (this.jwtTokenProvider.validateToken(refreshToken)) {
             Auth auth = this.authRepository.findByRefreshToken(refreshToken).orElseThrow(
                     () -> new IllegalArgumentException("해당 REFRESH_TOKEN 을 찾을 수 없습니다. refresh_token = " + refreshToken));
 
+            // 새 엑세스 토큰 생성
             String newAccessToken = this.jwtTokenProvider.generateAccessToken(
                     new UsernamePasswordAuthenticationToken(
                             new CustomMemberDetails(auth.getMember()), auth.getMember().getPassword()));
+
+            // DB에 엑세스 토큰 업데이트 (필요한 경우)
             auth.updateAccessToken(newAccessToken);
             return newAccessToken;
         }
-        // IF NOT AVAILABLE REFRESH_TOKEN EXPIRATION, REGENERATE ACCESS_TOKEN AND REFRESH_TOKEN
-        // IN THIS CASE, USER HAVE TO LOGIN AGAIN, SO REGENERATE IS NOT APPROPRIATE
+        // 리프레시 토큰 만료 등의 이유로 새 토큰 생성 실패
         return null;
     }
 

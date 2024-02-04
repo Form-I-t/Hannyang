@@ -2,6 +2,8 @@ package com.example.hannyang.jwt;
 
 import com.example.hannyang.member.CustomMemberDetails;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -86,5 +88,18 @@ public class JwtTokenProvider {
             System.out.println("JWT claims string is empty.");
         }
         return false;
+    }
+
+    // 쿠키 사용
+    public void createTokenCookie(String token, HttpServletResponse response) {
+        // 쿠키 생성
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true); // HttpOnly 설정
+        cookie.setSecure(true); // Secure 설정
+        cookie.setPath("/"); // 모든 경로에서 쿠키 접근 가능
+        cookie.setMaxAge((int) (jwtAccessTokenExpirationTime / 1000)); // 만료 시간 설정
+
+        // 응답에 쿠키 추가
+        response.addCookie(cookie);
     }
 }
