@@ -7,6 +7,7 @@ import com.example.hannyang.member.dtos.AuthResponseDto;
 import com.example.hannyang.member.dtos.MemberRequestDto;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,11 @@ public class AuthController {
     private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Value("${jwt.accessTokenExpirationTime}")
+    private Long jwtAccessTokenExpirationTime;
+    @Value("${jwt.refreshTokenExpirationTime}")
+    private Long jwtRefreshTokenExpirationTime;
+
     /**
      * 로그인 API
      */
@@ -24,11 +30,10 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody AuthRequestDto requestDto, HttpServletResponse response) {
         AuthResponseDto authResponseDto = this.authService.login(requestDto);
 
-        // 액세스 토큰을 쿠키에 저장
-        jwtTokenProvider.createTokenCookie(authResponseDto.getAccessToken(), response);
 
-        // 리프레시 토큰도 쿠키에 저장
-        jwtTokenProvider.createRefreshTokenCookie(authResponseDto.getRefreshToken(), response);
+        // 액세스 토큰과 리프레시 토큰을 HTTP 응답 헤더에 추가
+        jwtTokenProvider.addTokenToHeader(response, "Access-Token", authResponseDto.getAccessToken(), jwtAccessTokenExpirationTime);
+        jwtTokenProvider.addTokenToHeader(response, "Refresh-Token", authResponseDto.getRefreshToken(), jwtRefreshTokenExpirationTime);
 
         // 로그인 성공 응답 반환 (클라이언트에 쿠키를 포함하여 반환됩니다)
         return ResponseEntity.status(HttpStatus.OK).body("로그인 성공");
@@ -55,10 +60,11 @@ public class AuthController {
      */
     @GetMapping("/api/v1/auth/refresh")
     public ResponseEntity<?> refresh(@RequestHeader("REFRESH_TOKEN") String refreshToken, HttpServletResponse response) {
-        String newAccessToken = this.authService.refreshToken(refreshToken);
-        if (newAccessToken != null) {
-            // 새 엑세스 토큰을 쿠키에 저장
-            jwtTokenProvider.createTokenCookie(newAccessToken, response);
+        TokenPair tokenPair = this.authService.refreshToken(refreshToken);
+        if (tokenPair != null && tokenPair.getAccessToken() != null && tokenPair.getRefreshToken() != null) {
+            // 새 액세스 토큰과 리프레시 토큰을 HTTP 응답 헤더에 추가
+            jwtTokenProvider.addTokenToHeader(response, "Access-Token", tokenPair.getAccessToken(), jwtAccessTokenExpirationTime);
+            jwtTokenProvider.addTokenToHeader(response, "Refresh-Token", tokenPair.getRefreshToken(), jwtRefreshTokenExpirationTime);
             return ResponseEntity.status(HttpStatus.OK).body("토큰 갱신 성공");
         } else {
             // 새 토큰 생성 실패 (예: 리프레시 토큰 만료)

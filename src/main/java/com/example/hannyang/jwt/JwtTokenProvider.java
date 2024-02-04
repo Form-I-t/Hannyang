@@ -113,4 +113,8 @@ public class JwtTokenProvider {
         // 응답에 쿠키 추가
         response.addCookie(refreshCookie);
     }
+
+    public void addTokenToHeader(HttpServletResponse response, String tokenName, String tokenValue, Long duration) {
+        response.setHeader(tokenName, "Bearer " + tokenValue);
+    }
 }

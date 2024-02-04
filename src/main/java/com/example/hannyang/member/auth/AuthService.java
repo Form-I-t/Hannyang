@@ -72,24 +72,32 @@ public class AuthService {
      * Token 갱신
      */
     @Transactional
-    public String refreshToken(String refreshToken) {
+    public TokenPair refreshToken(String refreshToken) {
         // 체크: 리프레시 토큰이 유효한지 확인
         if (this.jwtTokenProvider.validateToken(refreshToken)) {
-            Auth auth = this.authRepository.findByRefreshToken(refreshToken).orElseThrow(
-                    () -> new IllegalArgumentException("해당 REFRESH_TOKEN 을 찾을 수 없습니다. refresh_token = " + refreshToken));
+            Auth auth = this.authRepository.findByRefreshToken(refreshToken)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 REFRESH_TOKEN 을 찾을 수 없습니다. refresh_token = " + refreshToken));
 
-            // 새 엑세스 토큰 생성
+            // 새 엑세스 토큰과 리프레시 토큰 생성
             String newAccessToken = this.jwtTokenProvider.generateAccessToken(
                     new UsernamePasswordAuthenticationToken(
                             new CustomMemberDetails(auth.getMember()), auth.getMember().getPassword()));
+            String newRefreshToken = this.jwtTokenProvider.generateRefreshToken(
+                    new UsernamePasswordAuthenticationToken(
+                            new CustomMemberDetails(auth.getMember()), auth.getMember().getPassword()));
 
-            // DB에 엑세스 토큰 업데이트 (필요한 경우)
+            // DB에 새 토큰 업데이트
             auth.updateAccessToken(newAccessToken);
-            return newAccessToken;
+            auth.updateRefreshToken(newRefreshToken);
+
+            // 새 토큰 쌍 반환
+            return new TokenPair(newAccessToken, newRefreshToken);
+        } else {
+            // 리프레시 토큰 만료 등의 이유로 새 토큰 생성 실패
+            throw new SecurityException("리프레시 토큰이 유효하지 않습니다.");
         }
-        // 리프레시 토큰 만료 등의 이유로 새 토큰 생성 실패
-        return null;
     }
+
 
     /**
      * 로그아웃
