@@ -30,7 +30,6 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody AuthRequestDto requestDto, HttpServletResponse response) {
         AuthResponseDto authResponseDto = this.authService.login(requestDto);
 
-
         // 액세스 토큰과 리프레시 토큰을 HTTP 응답 헤더에 추가
         jwtTokenProvider.addTokenToHeader(response, "Access-Token", authResponseDto.getAccessToken(), jwtAccessTokenExpirationTime);
         jwtTokenProvider.addTokenToHeader(response, "Refresh-Token", authResponseDto.getRefreshToken(), jwtRefreshTokenExpirationTime);
