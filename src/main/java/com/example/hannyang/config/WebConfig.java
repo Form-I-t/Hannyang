@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:3000", "http://localhost:3002") // 모든 출처(origin)에서의 요청을 허용합니다.
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메소드를 지정합니다.
                 .allowedHeaders("*") // 모든 헤더를 허용합니다.
-                .exposedHeaders("Authorization") // 클라이언트 측에서 'Authorization' 헤더에 접근할 수 있도록 설정합니다.
+                .exposedHeaders("Access-Token", "Refresh-Token") // 클라이언트 측에서  헤더에 접근할 수 있도록 설정합니다.
                 .allowCredentials(true) // 쿠키 등의 인증 정보를 허용합니다.
                 .maxAge(3600); // pre-flight 요청의 캐시 시간을 지정합니다.
     }
