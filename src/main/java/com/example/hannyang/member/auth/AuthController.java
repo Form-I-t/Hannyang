@@ -24,8 +24,11 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody AuthRequestDto requestDto, HttpServletResponse response) {
         AuthResponseDto authResponseDto = this.authService.login(requestDto);
 
-        // JWT 토큰을 쿠키에 저장
+        // 액세스 토큰을 쿠키에 저장
         jwtTokenProvider.createTokenCookie(authResponseDto.getAccessToken(), response);
+
+        // 리프레시 토큰도 쿠키에 저장
+        jwtTokenProvider.createRefreshTokenCookie(authResponseDto.getRefreshToken(), response);
 
         // 로그인 성공 응답 반환 (클라이언트에 쿠키를 포함하여 반환됩니다)
         return ResponseEntity.status(HttpStatus.OK).body("로그인 성공");

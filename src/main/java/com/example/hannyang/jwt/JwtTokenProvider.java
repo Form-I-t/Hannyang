@@ -102,4 +102,15 @@ public class JwtTokenProvider {
         // 응답에 쿠키 추가
         response.addCookie(cookie);
     }
+
+    public void createRefreshTokenCookie(String refreshToken, HttpServletResponse response) {
+        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+        refreshCookie.setHttpOnly(true); // HttpOnly 설정
+        refreshCookie.setSecure(true); // Secure 설정
+        refreshCookie.setPath("/"); // 모든 경로에서 쿠키 접근 가능
+        refreshCookie.setMaxAge((int) (jwtRefreshTokenExpirationTime / 1000)); // 만료 시간 설정 (리프레시 토큰 만료 시간 사용)
+
+        // 응답에 쿠키 추가
+        response.addCookie(refreshCookie);
+    }
 }
