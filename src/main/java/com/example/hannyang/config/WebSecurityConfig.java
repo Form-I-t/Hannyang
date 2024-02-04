@@ -11,12 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +21,6 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .cors().configurationSource(corsConfigurationSource()).and() // CORS 설정 추가
                 .csrf().disable() // CSRF 토큰 비활성화
                 .authorizeHttpRequests(authz -> authz
                         // 해당 요청에 대해 아무나 승인
@@ -44,19 +37,6 @@ public class WebSecurityConfig {
                 )
                 .addFilterBefore(this.jwtTokenFilter, UsernamePasswordAuthenticationFilter.class) // JWT 필터 추가
                 .build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3002"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token")); // 'Authorization' 헤더를 명시적으로 허용
-        configuration.setExposedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token")); // 'Authorization' 헤더를 노출
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 
 
