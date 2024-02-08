@@ -63,7 +63,7 @@ public class MemberController {
     @ApiResponse(responseCode = "200", description = "성공적으로 회원 정보를 삭제함")
     @ApiResponse(responseCode = "401", description = "인증 실패")
     @ApiResponse(responseCode = "500", description = "서버 오류")
-    @DeleteMapping("/api/v1/member/admin")
+    @DeleteMapping("/api/v1/member")
     public ResponseEntity<?> deleteMember(@RequestHeader("Authorization") String accessToken) {
         Long id = this.jwtTokenProvider.getUserIdFromToken(accessToken.substring(7));
         this.memberService.delete(id);
