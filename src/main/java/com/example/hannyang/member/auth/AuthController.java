@@ -75,7 +75,7 @@ public class AuthController {
      * 로그아웃 API
      */
     @PostMapping("/api/v1/auth/logout")
-    public ResponseEntity<?> logout(@RequestHeader("ACCESS_TOKEN") String accessToken) {
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken) {
         this.authService.logout(accessToken);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

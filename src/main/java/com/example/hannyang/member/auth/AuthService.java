@@ -34,20 +34,17 @@ public class AuthService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. email = " + requestDto.getEmail());
         }
 
-        // GENERATE ACCESS_TOKEN AND REFRESH_TOKEN
         String accessToken = this.jwtTokenProvider.generateAccessToken(
                 new UsernamePasswordAuthenticationToken(new CustomMemberDetails(member), member.getPassword()));
         String refreshToken = this.jwtTokenProvider.generateRefreshToken(
                 new UsernamePasswordAuthenticationToken(new CustomMemberDetails(member), member.getPassword()));
 
-        // CHECK IF AUTH ENTITY EXISTS, THEN UPDATE TOKEN
         if (this.authRepository.existsByMember(member)) {
             member.getAuth().updateAccessToken(accessToken);
             member.getAuth().updateRefreshToken(refreshToken);
             return new AuthResponseDto(member.getAuth());
         }
 
-        // IF NOT EXISTS AUTH ENTITY, SAVE AUTH ENTITY AND TOKEN
         Auth auth = this.authRepository.save(Auth.builder()
                 .member(member)
                 .tokenType("Bearer")
@@ -104,7 +101,6 @@ public class AuthService {
      */
     @Transactional
     public void logout(String accessToken) {
-        // CHECK IF ACCESS_TOKEN EXPIRATION AVAILABLE, THEN DELETE AUTH ENTITY
         if (this.jwtTokenProvider.validateToken(accessToken)) {
             Auth auth = this.authRepository.findByAccessToken(accessToken).orElseThrow(
                     () -> new IllegalArgumentException("해당 ACCESS_TOKEN 을 찾을 수 없습니다. access_token = " + accessToken));

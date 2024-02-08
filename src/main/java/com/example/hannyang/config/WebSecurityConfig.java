@@ -28,7 +28,7 @@ public class WebSecurityConfig {
                                 "/product/all-products", "/product/products-by-category", "/survey-history/by-survey-number/", "/survey/value-for-money", "/survey/popular",
                                 "/survey/paged", "/survey/latest", "/survey/by-points", "/survey/by-deadline", "/api/v1/auth/signup", "/api/v1/auth/login").permitAll()
                         // 관리자만 접근할 수 있는 경로 설정
-                        .requestMatchers("/product/create-product", "/survey-history/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/product/create-product", "/survey-history/admin/**", "/api/v1/member/admin").hasRole("ADMIN")
                         // 기타 모든 요청에 대해 승인된 사용자만 허용
                         .anyRequest().authenticated()
                 )
