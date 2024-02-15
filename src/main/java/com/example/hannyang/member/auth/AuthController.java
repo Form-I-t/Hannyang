@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
@@ -34,8 +37,14 @@ public class AuthController {
         jwtTokenProvider.addTokenToHeader(response, "Authorization", authResponseDto.getAccessToken(), jwtAccessTokenExpirationTime);
         jwtTokenProvider.addTokenToHeader(response, "Refresh_Token", authResponseDto.getRefreshToken(), jwtRefreshTokenExpirationTime);
 
-        // 로그인 성공 응답 반환 (클라이언트에 쿠키를 포함하여 반환됩니다)
-        return ResponseEntity.status(HttpStatus.OK).body("로그인 성공");
+        // 로그인 성공 응답에서 회원의 id를 포함하여 반환
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "로그인 성공");
+        // AuthResponseDto 내에 Member의 id를 가져오는 메소드가 있다고 가정합니다.
+        responseBody.put("memberId", authResponseDto.getMemberId());
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+
     }
 
 
