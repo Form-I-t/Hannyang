@@ -9,14 +9,13 @@ import lombok.Setter;
 public class MemberResponseDto {
     private Long id;
     private String role;
-    private String username;
+    private String nickname;
     private String email;
-    private String contact;
     private Integer point;
 
     public MemberResponseDto(Member entity) {
         this.id = entity.getMemberId();
-        this.username = entity.getNickname();
+        this.nickname = entity.getNickname();
         this.email = entity.getEmail();
         this.point = entity.getPoints();
         this.role = entity.getRole().name();
