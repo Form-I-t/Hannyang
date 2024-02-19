@@ -12,6 +12,7 @@ public class MemberResponseDto {
     private String nickname;
     private String email;
     private Integer point;
+    private String profileImageUrl;
 
     public MemberResponseDto(Member entity) {
         this.id = entity.getMemberId();
@@ -19,5 +20,6 @@ public class MemberResponseDto {
         this.email = entity.getEmail();
         this.point = entity.getPoints();
         this.role = entity.getRole().name();
+        this.profileImageUrl = entity.getProfileImageUrl();
     }
 }
