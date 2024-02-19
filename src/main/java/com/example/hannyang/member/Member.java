@@ -30,7 +30,9 @@ public class Member {
     private String nickname;
 
 
-    private Integer points;
+    @Column(nullable = false)
+    private int points = 0;
+
 
     @Enumerated(EnumType.STRING)
     private Role role;
