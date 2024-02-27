@@ -23,6 +23,8 @@ public class SurveyRequest {
     private Integer participantCount;// 희망 응답자 수
     private Integer rewardPoints; // 부여 포인트
     private LocalDateTime deadline; // 게시 기간
+    private LocalDateTime createdAt; // 생성일
+    private Integer price; // 가격
 
     // 3단계 정보
     private String accountHolderName; // 예금주명
