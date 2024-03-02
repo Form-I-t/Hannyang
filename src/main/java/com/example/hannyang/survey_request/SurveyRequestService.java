@@ -28,6 +28,8 @@ public class SurveyRequestService {
         surveyRequest.setParticipantCount(step2Data.getParticipantCount());
         surveyRequest.setRewardPoints(step2Data.getRewardPoints());
         surveyRequest.setDeadline(step2Data.getDeadline());
+        surveyRequest.setCreatedAt(step2Data.getCreatedAt());
+        surveyRequest.setPrice(step2Data.getPrice());
         return repository.save(surveyRequest);
     }
 
