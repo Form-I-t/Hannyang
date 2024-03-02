@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -22,8 +22,8 @@ public class SurveyRequest {
     // 2단계 정보
     private Integer participantCount;// 희망 응답자 수
     private Integer rewardPoints; // 부여 포인트
-    private LocalDateTime deadline; // 게시 기간
-    private LocalDateTime createdAt; // 생성일
+    private LocalDate deadline; // 게시 기간
+    private LocalDate createdAt; // 생성일
     private Integer price; // 가격
 
     // 3단계 정보
