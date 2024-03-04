@@ -26,7 +26,7 @@ public class ProductHistoryController {
             tags = {"product-history"})
     @ApiResponse(responseCode = "200", description = "조회 성공",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ProductHistory.class)))
+                    schema = @Schema(implementation = ProductHistoryResponseDto.class)))
     @GetMapping("/{memberId}")
     public List<ProductHistoryResponseDto> findByMemberId(@PathVariable Long memberId) {
         List<ProductHistory> productHistories = productHistoryRepository.findByMemberMemberId(memberId);
@@ -71,7 +71,7 @@ public class ProductHistoryController {
             tags = {"product-history"})
     @ApiResponse(responseCode = "200", description = "조회 성공",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ProductHistory.class)))
+                    schema = @Schema(implementation = ProductHistoryResponseDto.class)))
     @GetMapping("/all")
     public List<ProductHistoryResponseDto> findAll() {
         return productHistoryService.findAll();
