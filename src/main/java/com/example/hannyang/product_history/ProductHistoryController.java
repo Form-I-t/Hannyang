@@ -59,7 +59,7 @@ public class ProductHistoryController {
     @ApiResponse(responseCode = "200", description = "변경 성공")
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @PostMapping("/change-status")
-    public void changeStatus(Long productHistoryId, Boolean status) {
+    public void changeStatus(@RequestBody Long productHistoryId, @RequestBody Boolean status) {
         productHistoryService.changeStatus(productHistoryId, status);
     }
 
