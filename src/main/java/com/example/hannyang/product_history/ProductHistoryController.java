@@ -1,15 +1,13 @@
 package com.example.hannyang.product_history;
 
+import com.example.hannyang.product_history.dtos.ProductHistoryRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,11 +35,11 @@ public class ProductHistoryController {
             tags = {"product-history"})
     @ApiResponse(responseCode = "200", description = "저장 성공",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ProductHistory.class)))
+                    schema = @Schema(implementation = ProductHistoryRequestDto.class)))
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     @PostMapping
-    public void saveProductHistory(ProductHistory productHistory, Integer usedPoints, Long memberId) {
-        productHistoryService.saveProductHistory(productHistory, usedPoints, memberId);
+    public void saveProductHistory(@RequestBody ProductHistoryRequestDto productHistoryRequestDTO) {
+        productHistoryService.saveProductHistory(productHistoryRequestDTO);
     }
 
     // 상품 주문 내역 상품 지급 상태 변경
