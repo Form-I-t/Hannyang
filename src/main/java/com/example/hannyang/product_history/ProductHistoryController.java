@@ -1,6 +1,7 @@
 package com.example.hannyang.product_history;
 
 import com.example.hannyang.product_history.dtos.ProductHistoryRequestDto;
+import com.example.hannyang.product_history.dtos.ProductHistoryResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,8 +28,16 @@ public class ProductHistoryController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ProductHistory.class)))
     @GetMapping("/{memberId}")
-    public List<ProductHistory> findByMemberId(Long memberId) {
-        return productHistoryRepository.findByMemberMemberId(memberId);
+    public List<ProductHistoryResponseDto> findByMemberId(@PathVariable Long memberId) {
+        List<ProductHistory> productHistories = productHistoryRepository.findByMemberMemberId(memberId);
+        return productHistories.stream()
+                .map(ph -> new ProductHistoryResponseDto(
+                        ph.getMember().getMemberId(),
+                        ph.getProductName(),
+                        ph.getUsedPoints(),
+                        ph.getIsGiven(),
+                        ph.getPurchaseDate()))
+                .collect(Collectors.toList());
     }
 
     @Operation(summary = "상품 구매 내역 저장 및 포인트 차감",
@@ -53,5 +63,17 @@ public class ProductHistoryController {
     @PostMapping("/change-status")
     public void changeStatus(Long productHistoryId, Boolean status) {
         productHistoryService.changeStatus(productHistoryId, status);
+    }
+
+    // 상품 전체 주문 내역 조회
+    @Operation(summary = "상품 전체 주문 내역 조회",
+            description = "상품 전체 주문 내역을 조회합니다.",
+            tags = {"product-history"})
+    @ApiResponse(responseCode = "200", description = "조회 성공",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ProductHistory.class)))
+    @GetMapping("/all")
+    public List<ProductHistoryResponseDto> findAll() {
+        return productHistoryService.findAll();
     }
 }

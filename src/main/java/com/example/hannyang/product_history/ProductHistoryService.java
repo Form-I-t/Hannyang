@@ -7,10 +7,13 @@ import com.example.hannyang.point.Point;
 import com.example.hannyang.point.PointService;
 import com.example.hannyang.point.PointType;
 import com.example.hannyang.product_history.dtos.ProductHistoryRequestDto;
+import com.example.hannyang.product_history.dtos.ProductHistoryResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,5 +54,18 @@ public class ProductHistoryService {
         ProductHistory productHistory = productHistoryRepository.findById(productHistoryId).orElseThrow();
         productHistory.setIsGiven(status);
         productHistoryRepository.save(productHistory);
+    }
+
+    // 상품 주문 내역 전체 조회
+    public List<ProductHistoryResponseDto> findAll() {
+        List<ProductHistory> productHistories = productHistoryRepository.findAll();
+        return productHistories.stream()
+                .map(ph -> new ProductHistoryResponseDto(
+                        ph.getMember().getMemberId(),
+                        ph.getProductName(),
+                        ph.getUsedPoints(),
+                        ph.getIsGiven(),
+                        ph.getPurchaseDate()))
+                .collect(Collectors.toList());
     }
 }
